@@ -1,6 +1,10 @@
 const express = require('express');
-const {getAllFromDatabase, addToDatabase, getFromDatabaseById} =
-  require('./db.js');
+const {
+  getAllFromDatabase,
+  addToDatabase,
+  getFromDatabaseById,
+  updateInstanceInDatabase,
+} =require('./db.js');
 const apiRouter = new express.Router();
 
 apiRouter.get('/minions', (req, res) => {
@@ -28,7 +32,9 @@ const validateMinion = (req, res, next) => {
   const salary = req.query.salary;
 
   if (name && title && salary) {
-    req.minion = {name, title, salary};
+    req.name = name;
+    req.title = title;
+    req.salary = salary;
     next();
   } else {
     res.status(400).send();
@@ -36,8 +42,21 @@ const validateMinion = (req, res, next) => {
 };
 
 apiRouter.post('/minions', validateMinion, (req, res) => {
-  const minion = addToDatabase('minions', req.minion);
+  const minion = addToDatabase('minions',
+      {
+        name: req.name,
+        title: req.title,
+        salary: req.salary,
+      });
   res.send(minion);
+});
+
+apiRouter.put('/minions/:minionId', validateMinion, (req, res) => {
+  req.minion.name = req.name;
+  req.minion.title = req.title;
+  req.minion.salary = req.salary;
+  updateInstanceInDatabase('minions', req.minion);
+  res.send(req.minion);
 });
 
 module.exports = apiRouter;
