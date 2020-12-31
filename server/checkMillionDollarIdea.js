@@ -1,6 +1,6 @@
 const checkMillionDollarIdea = (req, res, next) => {
-  const numWeeks = req.numWeeks;
-  const weeklyRevenue = req.weeklyRevenue;
+  const numWeeks = req.body.numWeeks;
+  const weeklyRevenue = req.body.weeklyRevenue;
   if (numWeeks && weeklyRevenue) {
     const totalValue = numWeeks * weeklyRevenue;
     if (totalValue >= 1000000) {
