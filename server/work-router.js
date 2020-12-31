@@ -3,6 +3,7 @@ const {
   getAllWorkByMinionId,
   addToDatabase,
   updateInstanceInDatabase,
+  deleteFromDatabasebyId,
 } = require('./db.js');
 const workRouter = new express.Router({mergeParams: true});
 
@@ -54,6 +55,15 @@ workRouter.put('/:workId', validateWork, (req, res) => {
   const work = updateInstanceInDatabase('work', req.work);
   if (work) {
     res.send(work);
+  } else {
+    res.status(404).send();
+  }
+});
+
+workRouter.delete('/:workId', (req, res) => {
+  const deleted = deleteFromDatabasebyId('work', req.work.id);
+  if (deleted) {
+    res.status(204).send();
   } else {
     res.status(404).send();
   }
