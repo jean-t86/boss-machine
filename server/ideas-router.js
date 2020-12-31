@@ -15,12 +15,15 @@ ideasRouter.get('/', (req, res) => {
 });
 
 const validateIdea = (req, res, next) => {
-  const name = req.query.name;
-  const description = req.query.description;
-  const numWeeks = Number(req.query.numWeeks);
-  const weeklyRevenue = Number(req.query.weeklyRevenue);
+  const name = req.body.name;
+  const description = req.body.description;
+  const numWeeks = Number(req.body.numWeeks);
+  const weeklyRevenue = Number(req.body.weeklyRevenue);
 
-  if (name && description && numWeeks && weeklyRevenue) {
+  if (typeof name !== 'undefined' &&
+  typeof description !== 'undefined' &&
+  typeof numWeeks !== 'undefined' &&
+  typeof weeklyRevenue !== 'undefined') {
     req.name = name;
     req.description = description;
     req.numWeeks = numWeeks;
@@ -38,7 +41,7 @@ ideasRouter.post('/', validateIdea, checkMillionDollarIdea, (req, res) => {
     numWeeks: req.numWeeks,
     weeklyRevenue: req.weeklyRevenue,
   });
-  res.send(idea);
+  res.status(201).send(idea);
 });
 
 ideasRouter.param('ideaId', (req, res, next, ideaId) => {
