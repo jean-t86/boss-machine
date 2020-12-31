@@ -13,13 +13,18 @@ workRouter.get('/', (req, res) => {
 });
 
 const validateWork = (req, res, next) => {
-  const title = req.query.title;
-  const description = req.query.description;
-  const hours = Number(req.query.hours);
-  if (title && description && hours) {
+  const title = req.body.title;
+  const description = req.body.description;
+  const hours = Number(req.body.hours);
+  const minionId = req.body.minionId;
+  if (typeof title !== 'undefined' &&
+  typeof description !== 'undefined' &&
+  typeof hours !== 'undefiend' &&
+  typeof minionId !== 'undefiend') {
     req.title = title;
     req.description = description;
     req.hours = hours;
+    req.minionId = minionId;
     next();
   } else {
     res.status(400).send();
@@ -34,7 +39,7 @@ workRouter.post('/', validateWork, (req, res) => {
         hours: req.hours,
         minionId: req.minion.id,
       });
-  res.send(newWork);
+  res.status(201).send(newWork);
 });
 
 workRouter.param('workId', (req, res, next, workId) => {
@@ -49,14 +54,19 @@ workRouter.param('workId', (req, res, next, workId) => {
 });
 
 workRouter.put('/:workId', validateWork, (req, res) => {
-  req.work.title = req.title;
-  req.work.description = req.description;
-  req.work.hours = req.hours;
-  const work = updateInstanceInDatabase('work', req.work);
-  if (work) {
-    res.send(work);
+  if (req.minionId === req.minion.id) {
+    req.work.title = req.title;
+    req.work.description = req.description;
+    req.work.hours = req.hours;
+    req.work.minionId = req.minionId;
+    const work = updateInstanceInDatabase('work', req.work);
+    if (work) {
+      res.send(work);
+    } else {
+      res.status(404).send();
+    }
   } else {
-    res.status(404).send();
+    res.status(400).send();
   }
 });
 

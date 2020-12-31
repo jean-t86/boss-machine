@@ -674,7 +674,7 @@ describe('/api/meetings routes', function() {
   });
 });
 
-xdescribe('BONUS: /api/minions/:minionId/work routes', function() {
+describe('BONUS: /api/minions/:minionId/work routes', function() {
   const fakeDb = require('../server/db.js').db;
 
   describe('GET /api/minions/:minionId/work', function() {
