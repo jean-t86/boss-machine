@@ -4,6 +4,7 @@ const {
   addToDatabase,
   getFromDatabaseById,
   updateInstanceInDatabase,
+  deleteFromDatabasebyId,
 } =require('./db.js');
 const apiRouter = new express.Router();
 
@@ -57,6 +58,11 @@ apiRouter.put('/minions/:minionId', validateMinion, (req, res) => {
   req.minion.salary = req.salary;
   updateInstanceInDatabase('minions', req.minion);
   res.send(req.minion);
+});
+
+apiRouter.delete('/minions/:minionId', (req, res) => {
+  deleteFromDatabasebyId('minions', req.minion.id);
+  res.status(204).send();
 });
 
 module.exports = apiRouter;
