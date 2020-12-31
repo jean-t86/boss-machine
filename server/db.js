@@ -269,6 +269,16 @@ const deleteAllFromDatabase = (modelType) => {
   return model.data;
 };
 
+const getAllWorkByMinionId = (minionId) => {
+  const model = findDataArrayByName('work');
+  if (model === null) {
+    return null;
+  }
+  return model.data.filter((element) => {
+    return element.minionId === minionId;
+  });
+};
+
 module.exports = {
   createMeeting,
   getAllFromDatabase,
@@ -277,4 +287,5 @@ module.exports = {
   updateInstanceInDatabase,
   deleteFromDatabasebyId,
   deleteAllFromDatabase,
+  getAllWorkByMinionId,
 };
