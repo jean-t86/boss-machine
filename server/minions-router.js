@@ -28,14 +28,19 @@ minionsRouter.get('/:minionId', (req, res) => {
 });
 
 const validateMinion = (req, res, next) => {
-  const name = req.query.name;
-  const title = req.query.title;
-  const salary = req.query.salary;
+  const name = req.body.name;
+  const title = req.body.title;
+  const salary = req.body.salary;
+  const weaknesses = req.body.weaknesses;
 
-  if (name && title && salary) {
+  if (typeof name !== 'undefined' &&
+  typeof title !== 'undefined' &&
+  typeof salary !== 'undefined' &&
+  typeof weaknesses !== 'undefined') {
     req.name = name;
     req.title = title;
     req.salary = salary;
+    req.weaknesses = weaknesses;
     next();
   } else {
     res.status(400).send();
@@ -48,14 +53,16 @@ minionsRouter.post('/', validateMinion, (req, res) => {
         name: req.name,
         title: req.title,
         salary: req.salary,
+        weaknesses: req.weaknesses,
       });
-  res.send(minion);
+  res.status(201).send(minion);
 });
 
 minionsRouter.put('/:minionId', validateMinion, (req, res) => {
   req.minion.name = req.name;
   req.minion.title = req.title;
   req.minion.salary = req.salary;
+  req.minion.weaknesses = req.weaknesses;
   updateInstanceInDatabase('minions', req.minion);
   res.send(req.minion);
 });
