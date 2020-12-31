@@ -1,5 +1,9 @@
 const express = require('express');
-const {getAllFromDatabase, addToDatabase} = require('./db.js');
+const {
+  getAllFromDatabase,
+  addToDatabase,
+  getFromDatabaseById,
+} = require('./db.js');
 const ideasRouter = new express.Router();
 
 ideasRouter.get('/', (req, res) => {
@@ -32,6 +36,20 @@ ideasRouter.post('/', validateIdea, (req, res) => {
     weeklyRevenue: req.weeklyRevenue,
   });
   res.send(idea);
+});
+
+ideasRouter.param('ideaId', (req, res, next, ideaId) => {
+  const idea = getFromDatabaseById('ideas', ideaId);
+  if (idea) {
+    req.idea = idea;
+    next();
+  } else {
+    res.status(404).send();
+  }
+});
+
+ideasRouter.get('/:ideaId', (req, res) => {
+  res.send(req.idea);
 });
 
 module.exports = ideasRouter;
