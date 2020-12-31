@@ -3,6 +3,7 @@ const {
   getAllFromDatabase,
   addToDatabase,
   getFromDatabaseById,
+  updateInstanceInDatabase,
 } = require('./db.js');
 const ideasRouter = new express.Router();
 
@@ -50,6 +51,15 @@ ideasRouter.param('ideaId', (req, res, next, ideaId) => {
 
 ideasRouter.get('/:ideaId', (req, res) => {
   res.send(req.idea);
+});
+
+ideasRouter.put('/:ideaId', validateIdea, (req, res) => {
+  req.idea.name = req.name;
+  req.idea.description = req.description;
+  req.idea.numWeeks = req.numWeeks;
+  req.idea.weeklyRevenue = req.weeklyRevenue;
+  const idea = updateInstanceInDatabase('ideas', req.idea);
+  res.send(idea);
 });
 
 module.exports = ideasRouter;
