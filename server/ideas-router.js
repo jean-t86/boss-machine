@@ -4,6 +4,7 @@ const {
   addToDatabase,
   getFromDatabaseById,
   updateInstanceInDatabase,
+  deleteFromDatabasebyId,
 } = require('./db.js');
 const ideasRouter = new express.Router();
 
@@ -60,6 +61,15 @@ ideasRouter.put('/:ideaId', validateIdea, (req, res) => {
   req.idea.weeklyRevenue = req.weeklyRevenue;
   const idea = updateInstanceInDatabase('ideas', req.idea);
   res.send(idea);
+});
+
+ideasRouter.delete('/:ideaId', (req, res) => {
+  const deleted = deleteFromDatabasebyId('ideas', req.idea.id);
+  if (deleted) {
+    res.status(204).send();
+  } else {
+    res.status(404).send();
+  }
 });
 
 module.exports = ideasRouter;
