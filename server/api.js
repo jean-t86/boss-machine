@@ -1,10 +1,25 @@
 const express = require('express');
-const {getAllFromDatabase, addToDatabase} = require('./db.js');
+const {getAllFromDatabase, addToDatabase, getFromDatabaseById} =
+  require('./db.js');
 const apiRouter = new express.Router();
 
 apiRouter.get('/minions', (req, res) => {
   const minions = getAllFromDatabase('minions');
   res.send(minions);
+});
+
+apiRouter.param('minionId', (req, res, next, minionId) => {
+  const minion = getFromDatabaseById('minions', minionId);
+  if (minion) {
+    req.minion = minion;
+    next();
+  } else {
+    res.status(404).send();
+  }
+});
+
+apiRouter.get('/minions/:minionId', (req, res) => {
+  res.send(req.minion);
 });
 
 const validateMinion = (req, res, next) => {
