@@ -2,11 +2,11 @@
   "name": "build-apis-boss-machine",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "webapi.js",
   "scripts": {
     "test": "cross-env PORT=8000 mocha --watch",
-    "start-dev": "webpack -w & nodemon --watch server.js --watch server/",
-    "start": "nodemon --watch server.js --watch server/",
+    "start-dev": "webpack -w & nodemon --watch webapi.js --watch server/",
+    "start": "nodemon --watch webapi.js --watch server/",
     "postinstall": "webpack"
   },
   "author": "Codecademy",
