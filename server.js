@@ -47,7 +47,7 @@ class Server {
    * Resource Sharing policy on the server.
    */
   setupCors(cors) {
-    this._expressApp.use(cors);
+    this._expressApp.use(cors());
   }
 
   /**

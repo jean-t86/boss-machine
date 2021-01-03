@@ -54,18 +54,17 @@ describe('Server', function() {
       const mockApp = sinon.mock(server.expressApp);
       mockApp.expects('use').once();
 
-      server.setupCors();
+      server.setupCors(cors);
 
       mockApp.verify();
     });
 
-    it('app.use is called with cors as argument', function() {
-      const mockApp = sinon.mock(server.expressApp);
-      mockApp.expects('use').once().withArgs(cors);
+    it('cors function is called when server.setupCors is called', function() {
+      const spyCors = sinon.spy(cors);
 
-      server.setupCors(cors);
+      server.setupCors(spyCors);
 
-      mockApp.verify();
+      assert.ok(spyCors.calledOnce);
     });
   });
 
