@@ -3,6 +3,7 @@ const sinon = require('sinon');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const morgan = require('morgan');
 
 const Server = require('../server.js');
 
@@ -64,6 +65,26 @@ describe('Server', function() {
       server.setupCors(cors);
 
       mockApp.verify();
+    });
+  });
+
+  describe('Set up morgan middleware', function() {
+    it('app.use is called when server.setupMorgan is called', function() {
+      const mockApp = sinon.mock(server.app);
+      mockApp.expects('use').once();
+
+      server.setupMorgan(morgan, 'combined');
+
+      mockApp.verify();
+    });
+
+    it('morgan is called with format combined', function() {
+      const spyMorgan = sinon.spy(morgan);
+      const format = 'combined';
+      server.setupMorgan(spyMorgan, format);
+
+      assert.ok(spyMorgan.calledOnce);
+      assert.strictEqual(format, spyMorgan.getCall(0).args[0]);
     });
   });
 });

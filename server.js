@@ -37,6 +37,16 @@ class Server {
   setupCors(cors) {
     this._app.use(cors);
   }
+
+  /**
+   * Sets the morgan logger for the server.
+   * @param {Middleware} morgan Middleware that logs every requests
+   * received to the console.
+   * @param {string} format The format of the message that gets logged.
+   */
+  setupMorgan(morgan, format) {
+    this._app.use(morgan(format));
+  }
 }
 
 module.exports = Server;
