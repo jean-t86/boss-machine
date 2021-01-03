@@ -1,3 +1,8 @@
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const morgan = require('morgan');
+const apiRouter = require('./server/api');
+
 /**
  * The Server class used to wrap around and configure an http.server created
  * when an Express application starts listening for incoming requests.
@@ -93,6 +98,19 @@ class Server {
       done();
       return false;
     }
+  }
+
+  /**
+   * Runs the server with the correct configuration
+   * @param {Server} server An instance of the Server class
+   * @param {number} port The port on which to listen for incoming requests
+   */
+  static run(server, port) {
+    server.setupBodyParser(bodyParser.json);
+    server.setupCors(cors);
+    server.setupMorgan(morgan, 'combined');
+    server.mountRouter('/api', apiRouter);
+    server.listen(port, `Server is listening on port: ${port}`);
   }
 }
 

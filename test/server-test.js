@@ -175,4 +175,37 @@ describe('Server', function() {
       assert.ok(!server.close(done));
     });
   });
+
+  describe('Runs the server', function() {
+    it('calls all methods necessary to run the server', function(done) {
+      const spyBodyParser = sinon.spy(server, 'setupBodyParser');
+      const spyCors = sinon.spy(server, 'setupCors');
+      const spyMorgan = sinon.spy(server, 'setupMorgan');
+      const spyMountApiRouter = sinon.spy(server, 'mountRouter');
+      const spyListen = sinon.spy(server, 'listen');
+
+      Server.run(server, 4001);
+
+      server.httpServer.on('listening', ()=> {
+        assert.ok(spyBodyParser.calledOnce);
+        assert.strictEqual(spyBodyParser.getCall(0).args[0], bodyParser.json);
+
+        assert.ok(spyCors.calledAfter(spyBodyParser));
+        assert.strictEqual(spyCors.getCall(0).args[0], cors);
+
+        assert.ok(spyMorgan.calledAfter(spyCors));
+        assert.strictEqual(spyMorgan.getCall(0).args[0], morgan);
+        assert.strictEqual(spyMorgan.getCall(0).args[1], 'combined');
+
+        assert.ok(spyMountApiRouter.calledAfter(spyMorgan));
+        assert.strictEqual(spyMountApiRouter.getCall(0).args[0], '/api');
+        assert.strictEqual(spyMountApiRouter.getCall(0).args[1], apiRouter);
+
+        assert.ok(spyListen.calledAfter(spyMountApiRouter));
+        assert.strictEqual(spyListen.getCall(0).args[0], 4001);
+
+        server.close(done);
+      });
+    });
+  });
 });
