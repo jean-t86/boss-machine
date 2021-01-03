@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const morgan = require('morgan');
 
+const apiRouter = require('../server/api.js');
 const Server = require('../server.js');
 
 describe('Server', function() {
@@ -85,6 +86,27 @@ describe('Server', function() {
 
       assert.ok(spyMorgan.calledOnce);
       assert.strictEqual(format, spyMorgan.getCall(0).args[0]);
+    });
+  });
+
+  describe('Mount API router', function() {
+    it('app.use is called when server.mountApiRouter is called', function() {
+      const mockApp = sinon.mock(server.app);
+      mockApp.expects('use').once();
+
+      server.mountRouter('', null);
+
+      mockApp.verify();
+    });
+
+    it('app.use is called with the route and apiRouter', function() {
+      const spyApp = sinon.spy(server.app, 'use');
+
+      server.mountRouter('/api', apiRouter);
+
+      assert.ok(spyApp.calledOnce);
+      assert.strictEqual('/api', spyApp.getCall(0).args[0]);
+      assert.strictEqual(apiRouter, spyApp.getCall(0).args[1]);
     });
   });
 });

@@ -47,6 +47,15 @@ class Server {
   setupMorgan(morgan, format) {
     this._app.use(morgan(format));
   }
+
+  /**
+   * Mounts a router on the route provided.
+   * @param {string} route The route on which to mount the router.
+   * @param {Middleware} router A router for the API.
+   */
+  mountRouter(route, router) {
+    this._app.use(route, router);
+  }
 }
 
 module.exports = Server;
