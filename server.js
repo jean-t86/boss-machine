@@ -11,6 +11,23 @@ class Server {
   constructor(express) {
     this._app = express();
   }
+
+  /**
+   * Returns the Express application
+   */
+  get app() {
+    return this._app;
+  }
+
+  /**
+   * Sets the body parser for the server.
+   * @param {Middleware} bodyParser Middleware that only parses a
+   * specific Content-Type and only looks at requests where the header
+   * matches the type otion.
+   */
+  setupBodyParser(bodyParser) {
+    this._app.use(bodyParser());
+  }
 }
 
 module.exports = Server;
