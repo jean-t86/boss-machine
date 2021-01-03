@@ -20,6 +20,13 @@ class Server {
   }
 
   /**
+   * Returns the httpServer
+   */
+  get httpServer() {
+    return this._httpServer;
+  }
+
+  /**
    * Sets the body parser for the server.
    * @param {Middleware} bodyParser Middleware that only parses a
    * specific Content-Type and only looks at requests where the header
@@ -66,9 +73,26 @@ class Server {
    * @return {http.Server} An http.Server object
    */
   listen(port, msg) {
-    return this._expressApp.listen(port, () => {
+    this._httpServer = this._expressApp.listen(port, () => {
       console.log(msg);
     });
+    return this._httpServer;
+  }
+
+  /**
+   *  Closes the http.Server connection
+   * @param {callback} done A callback that marks the end of an asynchronous
+   * method call. This is necessary for correct unit testing behavior.
+   * @return {boolean} True is there was a connection to close, false otherwise.
+   */
+  close(done) {
+    if (this._httpServer) {
+      this._httpServer.close(done);
+      return true;
+    } else {
+      done();
+      return false;
+    }
   }
 }
 

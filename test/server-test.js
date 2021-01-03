@@ -151,4 +151,28 @@ describe('Server', function() {
       });
     });
   });
+
+  describe('Closes the http.Server connection', function(done) {
+    it('httpServer.close is called when Server.close is called', function() {
+      const httpServer = server.listen(4001);
+      const spyHttpServer = sinon.spy(server.httpServer, 'close');
+
+      httpServer.on('listening', () => {
+        server.close(done);
+        assert.ok(spyHttpServer.calledOnce);
+      });
+    });
+
+    it('server.close returns true if server is listening', function(done) {
+      const httpServer =server.listen(4001);
+
+      httpServer.on('listening', () => {
+        assert.ok(server.close(done));
+      });
+    });
+
+    it('server.close returns false if server is not listening', function(done) {
+      assert.ok(!server.close(done));
+    });
+  });
 });
