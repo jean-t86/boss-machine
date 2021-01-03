@@ -9,14 +9,14 @@ class Server {
    * application
    */
   constructor(express) {
-    this._app = express();
+    this._expressApp = express();
   }
 
   /**
    * Returns the Express application
    */
-  get app() {
-    return this._app;
+  get expressApp() {
+    return this._expressApp;
   }
 
   /**
@@ -26,7 +26,7 @@ class Server {
    * matches the type otion.
    */
   setupBodyParser(bodyParser) {
-    this._app.use(bodyParser());
+    this._expressApp.use(bodyParser());
   }
 
   /**
@@ -35,7 +35,7 @@ class Server {
    * Resource Sharing policy on the server.
    */
   setupCors(cors) {
-    this._app.use(cors);
+    this._expressApp.use(cors);
   }
 
   /**
@@ -45,7 +45,7 @@ class Server {
    * @param {string} format The format of the message that gets logged.
    */
   setupMorgan(morgan, format) {
-    this._app.use(morgan(format));
+    this._expressApp.use(morgan(format));
   }
 
   /**
@@ -54,7 +54,7 @@ class Server {
    * @param {Middleware} router A router for the API.
    */
   mountRouter(route, router) {
-    this._app.use(route, router);
+    this._expressApp.use(route, router);
   }
 
   /**
@@ -66,7 +66,7 @@ class Server {
    * @return {http.Server} An http.Server object
    */
   listen(port, msg) {
-    return this._app.listen(port, () => {
+    return this._expressApp.listen(port, () => {
       console.log(msg);
     });
   }

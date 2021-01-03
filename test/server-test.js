@@ -26,13 +26,13 @@ describe('Server', function() {
       server = new Server(spyExpress);
 
       assert.ok(spyExpress.calledOnce);
-      assert.ok(server.app !== undefined);
+      assert.ok(server.expressApp !== undefined);
     });
   });
 
   describe('Set up body-parser.json middleware', function() {
     it('app.use is called when server.setupBodyParser is called', function() {
-      const mockApp = sinon.mock(server.app);
+      const mockApp = sinon.mock(server.expressApp);
       mockApp.expects('use').once();
 
       server.setupBodyParser(bodyParser.json);
@@ -51,7 +51,7 @@ describe('Server', function() {
 
   describe('Set up cors middleware', function() {
     it('app.use is called when server.setupCors is called', function() {
-      const mockApp = sinon.mock(server.app);
+      const mockApp = sinon.mock(server.expressApp);
       mockApp.expects('use').once();
 
       server.setupCors();
@@ -60,7 +60,7 @@ describe('Server', function() {
     });
 
     it('app.use is called with cors as argument', function() {
-      const mockApp = sinon.mock(server.app);
+      const mockApp = sinon.mock(server.expressApp);
       mockApp.expects('use').once().withArgs(cors);
 
       server.setupCors(cors);
@@ -71,7 +71,7 @@ describe('Server', function() {
 
   describe('Set up morgan middleware', function() {
     it('app.use is called when server.setupMorgan is called', function() {
-      const mockApp = sinon.mock(server.app);
+      const mockApp = sinon.mock(server.expressApp);
       mockApp.expects('use').once();
 
       server.setupMorgan(morgan, 'combined');
@@ -91,7 +91,7 @@ describe('Server', function() {
 
   describe('Mount API router', function() {
     it('app.use is called when server.mountApiRouter is called', function() {
-      const mockApp = sinon.mock(server.app);
+      const mockApp = sinon.mock(server.expressApp);
       mockApp.expects('use').once();
 
       server.mountRouter('', null);
@@ -100,7 +100,7 @@ describe('Server', function() {
     });
 
     it('app.use is called with the route and apiRouter', function() {
-      const spyApp = sinon.spy(server.app, 'use');
+      const spyApp = sinon.spy(server.expressApp, 'use');
 
       server.mountRouter('/api', apiRouter);
 
@@ -112,7 +112,7 @@ describe('Server', function() {
 
   describe('Listens for incoming requests', function() {
     it('app.listen is called when server.listen called', function() {
-      const mockApp = sinon.mock(server.app);
+      const mockApp = sinon.mock(server.expressApp);
       mockApp.expects('listen').once();
 
       server.listen();
@@ -129,7 +129,7 @@ describe('Server', function() {
 
     it('server listens to port when server.listen is called', function(done) {
       const port = 4002;
-      const spyApp = sinon.spy(server.app, 'listen');
+      const spyApp = sinon.spy(server.expressApp, 'listen');
       const httpServer = server.listen(port);
 
       assert.ok(spyApp.calledOnce);
