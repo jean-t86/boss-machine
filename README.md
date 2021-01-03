@@ -1,23 +1,4 @@
 # Boss Machine
-## Table of contents
-* [General information](#general-information)
-* [Technologies](#technologies)
-* [Project Overview](#project-overview)
-* [How to Begin](#how-to-begin)
-* [Implementation Details](#implementation-details)
-* [Testing](#testing)
-
-## Technologies
-* JavaScript
-* Node.js
-* Express.js
-
-## General Information
-This is a practice lab from the [Back-end Engineer path on Codecademy](https://www.codecademy.com/learn/paths/back-end-engineer-career-path). The course teaches all the major technologies and skills that a back-end engineer needs to know.
-
-This project comes after completing 33% of the course.
-
-The rest of this Readme file comes from the starting code for this project, and is written by the Codecademy team. 
 
 ## Project Overview
 
