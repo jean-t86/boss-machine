@@ -16,7 +16,7 @@ describe('Server', function() {
   });
 
   afterEach(function() {
-
+    sinon.restore();
   });
 
   describe('Express app initialization', function() {
@@ -107,6 +107,48 @@ describe('Server', function() {
       assert.ok(spyApp.calledOnce);
       assert.strictEqual('/api', spyApp.getCall(0).args[0]);
       assert.strictEqual(apiRouter, spyApp.getCall(0).args[1]);
+    });
+  });
+
+  describe('Listens for incoming requests', function() {
+    it('app.listen is called when server.listen called', function() {
+      const mockApp = sinon.mock(server.app);
+      mockApp.expects('listen').once();
+
+      server.listen();
+
+      mockApp.verify();
+    });
+
+    it('server.listen returns an http.Server object', function(done) {
+      const httpServer = server.listen();
+
+      assert.ok(httpServer !== undefined);
+      httpServer.close(done);
+    });
+
+    it('server listens to port when server.listen is called', function(done) {
+      const port = 4002;
+      const spyApp = sinon.spy(server.app, 'listen');
+      const httpServer = server.listen(port);
+
+      assert.ok(spyApp.calledOnce);
+      assert.strictEqual(spyApp.getCall(0).args[0], port);
+      httpServer.close(done);
+    });
+
+    it('logs a message when the server starts to listen', function(done) {
+      const spyConsole = sinon.spy(console, 'log');
+      const port = 4003;
+      const msg = `Server is listening on port: ${port}`;
+
+      const httpServer = server.listen(port, msg);
+
+      httpServer.on('listening', () => {
+        assert.ok(spyConsole.calledOnce);
+        assert.strictEqual(spyConsole.getCall(0).args[0], msg);
+        httpServer.close(done);
+      });
     });
   });
 });

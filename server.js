@@ -56,6 +56,20 @@ class Server {
   mountRouter(route, router) {
     this._app.use(route, router);
   }
+
+  /**
+   * Starts listening for incoming requests.
+   * @param {number} port The port number on which the server listent to
+   * incoming requests.
+   * @param {string} msg The message to log to the console when the server
+   * starts to listen for incoming requests.
+   * @return {http.Server} An http.Server object
+   */
+  listen(port, msg) {
+    return this._app.listen(port, () => {
+      console.log(msg);
+    });
+  }
 }
 
 module.exports = Server;
