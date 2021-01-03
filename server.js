@@ -28,6 +28,15 @@ class Server {
   setupBodyParser(bodyParser) {
     this._app.use(bodyParser());
   }
+
+  /**
+   * Sets the CORS policy on the server.
+   * @param {Middleware} cors Middleware that sets the Cross-origin
+   * Resource Sharing policy on the server.
+   */
+  setupCors(cors) {
+    this._app.use(cors);
+  }
 }
 
 module.exports = Server;

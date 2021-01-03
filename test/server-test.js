@@ -2,6 +2,7 @@ const {assert} = require('chai');
 const sinon = require('sinon');
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const Server = require('../server.js');
 
@@ -43,6 +44,26 @@ describe('Server', function() {
       server.setupBodyParser(spyBodyParser);
 
       assert.ok(spyBodyParser.calledOnce);
+    });
+  });
+
+  describe('Set up cors middleware', function() {
+    it('app.use is called when server.setupCors is called', function() {
+      const mockApp = sinon.mock(server.app);
+      mockApp.expects('use').once();
+
+      server.setupCors();
+
+      mockApp.verify();
+    });
+
+    it('app.use is called with cors as argument', function() {
+      const mockApp = sinon.mock(server.app);
+      mockApp.expects('use').once().withArgs(cors);
+
+      server.setupCors(cors);
+
+      mockApp.verify();
     });
   });
 });
