@@ -85,7 +85,7 @@ describe('Server', function() {
       server.setupMorgan(spyMorgan, format);
 
       assert.ok(spyMorgan.calledOnce);
-      assert.strictEqual(format, spyMorgan.getCall(0).args[0]);
+      assert.strictEqual(spyMorgan.getCall(0).args[0], format);
     });
   });
 
@@ -101,12 +101,12 @@ describe('Server', function() {
 
     it('app.use is called with the route and apiRouter', function() {
       const spyApp = sinon.spy(server.expressApp, 'use');
-
-      server.mountRouter('/api', apiRouter);
+      const route = '/api';
+      server.mountRouter(route, apiRouter);
 
       assert.ok(spyApp.calledOnce);
-      assert.strictEqual('/api', spyApp.getCall(0).args[0]);
-      assert.strictEqual(apiRouter, spyApp.getCall(0).args[1]);
+      assert.strictEqual(spyApp.getCall(0).args[0], route);
+      assert.strictEqual(spyApp.getCall(0).args[1], apiRouter);
     });
   });
 
@@ -133,7 +133,7 @@ describe('Server', function() {
       const httpServer = server.listen(port);
 
       assert.ok(spyApp.calledOnce);
-      assert.strictEqual(spyApp.getCall(0).args[0], port);
+      assert.strictEqual(spyApp.getCall(0).args[0]. port);
       httpServer.close(done);
     });
 
