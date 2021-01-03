@@ -1,5 +1,30 @@
 # Boss Machine
+## Table of contents
+* [General information](#general-information)
+* [Technologies](#technologies)
+* [Project Overview](#project-overview)
+* [How to Begin](#how-to-begin)
+* [Implementation Details](#implementation-details)
+* [Testing](#testing)
 
+## Test Driven Development
+This branch's sole purpose is to rebuild the Boss Machine API using test driven development for the server side only. 
+
+I used the codebase with the completed project, and as first commit, removed all the server code for a fresh start.
+
+This code can be compared to the one in the `develop` branch to observe how the end-result implementation differs.
+
+## Technologies
+* JavaScript
+* Node.js
+* Express.js
+
+## General Information
+This is a practice lab from the [Back-end Engineer path on Codecademy](https://www.codecademy.com/learn/paths/back-end-engineer-career-path). The course teaches all the major technologies and skills that a back-end engineer needs to know.
+
+This project comes after completing 33% of the course.
+
+The rest of this Readme file comes from the starting code for this project, and is written by the Codecademy team. 
 ## Project Overview
 
 In this project, you will create an entire API to serve information to a Boss Machine, a unique management application for today's most accomplished (evil) entrepreneurs. You will create routes to manage your 'minions', your brilliant 'million dollar ideas', and to handle all the annoying meetings that keep getting added to your busy schedule.
