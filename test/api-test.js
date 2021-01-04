@@ -143,4 +143,76 @@ describe('Boss Machine API', function() {
           });
     });
   });
+
+  describe('PUT a minion', function() {
+    const minion = {
+      name: 'Bob',
+      title: 'Chief',
+      weaknesses: 'Nclearone',
+      salary: 10000,
+    };
+
+    const invalidMinion = {
+      name: '',
+      title: '',
+      weaknesses: '',
+      salary: null,
+    };
+
+    it('returns 204 when called', function(done) {
+      request(server.expressApp)
+          .put('/api/minions/1')
+          .send(minion)
+          .expect(200, done);
+    });
+
+    it('returns 404 if id is not found', function(done) {
+      request(server.expressApp)
+          .put('/api/minions/193')
+          .send(minion)
+          .expect(404, done);
+    });
+
+    it('returns 404 if the id is a string', function(done) {
+      request(server.expressApp)
+          .put('/api/minions/sdfd')
+          .send(minion)
+          .expect(404, done);
+    });
+
+    it('updates an existing minion in the database', async function() {
+      const id = '3';
+      const putRes = await request(server.expressApp)
+          .put(`/api/minions/${id}`)
+          .send(minion)
+          .expect(200);
+      const putMinion = putRes.body;
+
+      const getRes = await request(server.expressApp)
+          .get(`/api/minions/${id}`)
+          .expect(200);
+      const getMinion = getRes.body;
+
+      assert.deepEqual(putMinion, getMinion);
+    });
+
+    it('returns 400 if update with an invalid minion', function(done) {
+      const id = '3';
+      request(server.expressApp)
+          .put(`/api/minions/${id}`)
+          .send(invalidMinion)
+          .expect(400, done);
+    });
+
+    it('returns a minion with the same id as the param id', function() {
+      const id = '3';
+      request(server.expressApp)
+          .put(`/api/minions/${id}`)
+          .send(minion)
+          .expect(200)
+          .then((res) => {
+            assert.strictEqual(res.body.id, id);
+          });
+    });
+  });
 });
