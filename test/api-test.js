@@ -215,4 +215,34 @@ describe('Boss Machine API', function() {
           });
     });
   });
+
+  describe('DELETE a minion', function() {
+    it('returns 204 when called', function(done) {
+      request(server.expressApp)
+          .delete('/api/minions/2')
+          .expect(204, done);
+    });
+
+    it('successfully deletes an existing minion', async function() {
+      await request(server.expressApp)
+          .delete('/api/minions/5')
+          .expect(204);
+
+      await request(server.expressApp)
+          .get('/api/minions/5')
+          .expect(404);
+    });
+
+    it('returns 404 if the minion does not exist', function(done) {
+      request(server.expressApp)
+          .delete('/api/minions/234')
+          .expect(404, done);
+    });
+
+    it('returns 404 if the id is malformed', function(done) {
+      request(server.expressApp)
+          .delete('/api/minions/asfdsf')
+          .expect(404, done);
+    });
+  });
 });
