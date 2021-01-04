@@ -86,4 +86,61 @@ describe('Boss Machine API', function() {
       });
     });
   });
+
+  describe('POST a new minion', function() {
+    const minion = {
+      name: 'Bob',
+      title: 'Chief',
+      weaknesses: 'None',
+      salary: 10000,
+    };
+
+    const invalidMinion = {
+      name: '',
+      title: '',
+      weaknesses: '',
+      salary: null,
+    };
+
+    it('returns status code 201', function(done) {
+      request(server.expressApp)
+          .post('/api/minions')
+          .send(minion)
+          .expect(201, done);
+    });
+
+    it('creates new minion and returns it with status 201', async function() {
+      const postRes = await request(server.expressApp)
+          .post('/api/minions')
+          .send(minion)
+          .expect(201);
+      const newMinion = postRes.body;
+
+      const getRes = await request(server.expressApp)
+          .get(`/api/minions/${newMinion.id}`)
+          .expect(200);
+      const insertedMinion = getRes.body;
+
+      assert.strictEqual(insertedMinion.id, newMinion.id);
+    });
+
+    it('returns 404 if an invalid minion is sent through', function(done) {
+      request(server.expressApp)
+          .post('/api/minions')
+          .send(invalidMinion)
+          .expect(400, done);
+    });
+
+    it('returns a minion with an id', function() {
+      request(server.expressApp)
+          .post('/api/minions')
+          .send(minion)
+          .expect(201)
+          .then((res) => {
+            const minion = res.body;
+            expect(minion).to.have.own.property('id');
+            assert.ok(minion.id !== undefined);
+          });
+    });
+  });
 });
